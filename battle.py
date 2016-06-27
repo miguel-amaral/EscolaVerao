@@ -38,11 +38,11 @@ def desenhaTabuleiro(tabuleiro):
 		for coluna in linha:
 			print("", end=" ")
 			if(coluna == -1):
-				colourCode = bcolors.ANSI_GREEN
+				colourCode = bcolors.ANSI_BLUE
 			elif(coluna == 1):
 				colourCode = bcolors.ANSI_RED
 			else:
-				colourCode = bcolors.ANSI_BLUE
+				colourCode = bcolors.ANSI_BLACK
 			print(colourCode , "X", end="", sep="")
 			resetColour()
 
@@ -126,6 +126,7 @@ def dispararTiro(tabuleiro, coordenadas):
 		if(barcoAbatido(tabuleiro,valor_posicao)):
 			print(bcolors.ANSI_GREEN + "Parabens! barco afundado!" + bcolors.ANSI_RESET)
 	else:
+		tabuleiro[linha][coluna] = -1 #Registar posicao falhada
 		print("Apenas havia agua..")
 
 def coordenadaRandom():
@@ -173,7 +174,8 @@ def colocarBarco(tabuleiro, posicao, tamanhoBarco):
 
 
 def preencherTabuleiroAleatoriamente(tabuleiro):
-	tamanho_barcos = [2]
+	tamanho_barcos = [2,3,4,5,6]
+#	tamanho_barcos = [2]
 	for tamanho in tamanho_barcos:
 		colocado = False
 		while(not colocado):
@@ -184,27 +186,33 @@ def jogo():
 	tabuleiro2 = criaTabuleiro()
 	preencherTabuleiroAleatoriamente(tabuleiro1)
 	preencherTabuleiroAleatoriamente(tabuleiro2)
+	
 
-	print("Bem vindos ao jogo BATALHA NAVAL\n\n")
+	print("Bem vindos ao jogo BATALHA NAVAL")
 
-	#desenhaTabuleiroDescoberto(tabuleiro1)
-	#desenhaTabuleiroDescoberto(tabuleiro2)
+#	desenhaTabuleiroDescoberto(tabuleiro1)
+#	desenhaTabuleiroDescoberto(tabuleiro2)
 	while(not tabuleiroCompleto(tabuleiro1) and not tabuleiroCompleto(tabuleiro2)):
 		print("\n\nVez do ",bcolors.ANSI_PURPLE,bcolors.ANSI_BOLD,"Jogador 1:",sep="")
 		resetColour()
-		print("Tabuleiro do Adversario")
+		print("Tabuleiro do Adversario:")
 		desenhaTabuleiro(tabuleiro2)
 		coordenadas = pedeJogada()
 		dispararTiro(tabuleiro2,coordenadas)
 
 		print("\n\nVez do ",bcolors.ANSI_CYAN,bcolors.ANSI_BOLD,"Jogador 2:", sep="")
 		resetColour()
-		print("Tabuleiro do Adversario")
+		print("Tabuleiro do Adversario:")
 		desenhaTabuleiro(tabuleiro1)
 		coordenadas = pedeJogada()
 		dispararTiro(tabuleiro1,coordenadas)
 	print("\n\nWell done game is now over")
-
+	if(tabuleiroCompleto(tabuleiro1)):
+		print(bcolors.ANSI_CYAN,bcolors.ANSI_BOLD,"Jogador 2 foi o vencedor\n\n", sep="")
+	else:
+		print(bcolors.ANSI_PURPLE,bcolors.ANSI_BOLD,"Jogador 1 foi o vencedor\n\n", sep="")
+	
+	resetColour()
 jogo()
 
 
