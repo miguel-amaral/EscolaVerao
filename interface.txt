@@ -14,4 +14,4 @@ tabuleiro -> lista de listas com inteiros
  numero > 2 barco, sem danos
 
 
- coordenada -> tuplo/lista (linha,coluna)
+ coordenada -> lista [linha,coluna]

@@ -9,6 +9,7 @@ class bcolors:
 	ANSI_PURPLE = "\033[35m"
 	ANSI_CYAN =   "\033[36m"
 	ANSI_WHITE =  "\033[37m"
+	ANSI_BOLD =   "\033[1m"
 
 def resetColour():
 	print(bcolors.ANSI_RESET, end="")
@@ -118,12 +119,12 @@ def dispararTiro(tabuleiro, coordenadas):
 
 	valor_posicao = tabuleiro[linha][coluna]
 	if (valor_posicao == -1 or valor_posicao == 1 ):
-		print("Ja tinhas disparado nesta posicao, bala perdida ")
+		print("Ja tinhas disparado nesta posicao, bala perdida ..")
 	elif(valor_posicao > 1):
-		print("Parabens acertaste no barco!")
+		print(bcolors.ANSI_GREEN + "Parabens acertaste no barco!" + bcolors.ANSI_RESET)
 		tabuleiro[linha][coluna] = 1 #Registar que barco foi atacado
 		if(barcoAbatido(tabuleiro,valor_posicao)):
-			print("Parabens! barco afundado!")
+			print(bcolors.ANSI_GREEN + "Parabens! barco afundado!" + bcolors.ANSI_RESET)
 	else:
 		print("Apenas havia agua..")
 
@@ -172,15 +173,39 @@ def colocarBarco(tabuleiro, posicao, tamanhoBarco):
 
 
 def preencherTabuleiroAleatoriamente(tabuleiro):
-	tamanho_barcos = [2,3,4,5,6]
+	tamanho_barcos = [2]
 	for tamanho in tamanho_barcos:
 		colocado = False
 		while(not colocado):
 			colocado = colocarBarco(tabuleiro, posicaoRandom(), tamanho)
 
+def jogo():
+	tabuleiro1 = criaTabuleiro()
+	tabuleiro2 = criaTabuleiro()
+	preencherTabuleiroAleatoriamente(tabuleiro1)
+	preencherTabuleiroAleatoriamente(tabuleiro2)
 
+	print("Bem vindos ao jogo BATALHA NAVAL\n\n")
 
+	#desenhaTabuleiroDescoberto(tabuleiro1)
+	#desenhaTabuleiroDescoberto(tabuleiro2)
+	while(not tabuleiroCompleto(tabuleiro1) and not tabuleiroCompleto(tabuleiro2)):
+		print("\n\nVez do ",bcolors.ANSI_PURPLE,bcolors.ANSI_BOLD,"Jogador 1:",sep="")
+		resetColour()
+		print("Tabuleiro do Adversario")
+		desenhaTabuleiro(tabuleiro2)
+		coordenadas = pedeJogada()
+		dispararTiro(tabuleiro2,coordenadas)
 
+		print("\n\nVez do ",bcolors.ANSI_CYAN,bcolors.ANSI_BOLD,"Jogador 2:", sep="")
+		resetColour()
+		print("Tabuleiro do Adversario")
+		desenhaTabuleiro(tabuleiro1)
+		coordenadas = pedeJogada()
+		dispararTiro(tabuleiro1,coordenadas)
+	print("\n\nWell done game is now over")
+
+jogo()
 
 
 
