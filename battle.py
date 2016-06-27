@@ -50,6 +50,33 @@ def desenhaTabuleiro(tabuleiro):
 		numLinha = numLinha + 1
 	desenhaLinhaBaixo()
 
+def desenhaTabuleiroDescoberto(tabuleiro):
+	colourCode = ""
+	numLinha = 0
+	desenhaLinhaCima()
+	for linha in tabuleiro:
+		print(numLinha, end=" ")
+		print("┃", end="")
+
+		for coluna in linha:
+			print("", end=" ")
+			if(coluna == -1):
+				colourCode = bcolors.ANSI_GREEN
+			elif(coluna == 1):
+				colourCode = bcolors.ANSI_RED
+			elif(coluna == 0):
+				colourCode = bcolors.ANSI_BLUE
+			else:
+				colourCode = bcolors.ANSI_YELLOW
+			print(colourCode , "X", end="", sep="")
+			resetColour()
+
+
+		print(" ┃")
+		numLinha = numLinha + 1
+	desenhaLinhaBaixo()
+
+
 '''
 lista de listas com inteiros
 -1 tiro disparado sem barco
@@ -67,6 +94,8 @@ def pedeJogada():
 		coluna = input("Qual a coluna?[0-9]: ")
 		if(not linha.isdigit() or not coluna.isdigit() or int(linha) > 9 or int(coluna) > 9 or int(linha) < 0 or int(coluna) < 0):
 			print("Por favor apenas numeros entre 0 e 9 sao permitidos.")
+		else:
+			bool = False
 	return (int(linha),int(coluna))
 
 def tabuleiroCompleto(tabuleiro):
@@ -103,11 +132,64 @@ def coordenadaRandom():
 	coluna = random.randint(0, 9)
 	return (linha,coluna)
 
+def orientacaoRandom():
+	return random.randint(0, 1)
+
+def posicaoRandom():
+	return (coordenadaRandom(),orientacaoRandom())
+
+'''
+posicao (coordena, orientacao )
+orientacao - 0 para horizontal, 1 para vertical
+'''
+def colocarBarco(tabuleiro, posicao, tamanhoBarco):
+	orientacao = posicao[1]
+
+	base    = posicao[0][ orientacao ]
+	iterada = posicao[0][ (orientacao +1) %2]
+
+	if(iterada + tamanhoBarco > 10):
+		#Barco demasiado grande..
+		return False
+	else:
+		for i in range (iterada, iterada+tamanhoBarco):
+			if(orientacao == 0):
+				if(tabuleiro[base][i] > 1):
+					#Posicao preenchida
+					return False
+			else:
+				if(tabuleiro[i][base] > 1):
+					#Posicao preenchida
+					return False
+		#Preencher
+		for i in range (iterada, iterada+tamanhoBarco):
+			if(orientacao == 0):
+				tabuleiro[base][i] = tamanhoBarco
+			else:
+				tabuleiro[i][base] = tamanhoBarco
+	#Barco colocado com sucesso
+	return True
+
+
+def colocarBarcos(tabuleiro):
+	tamanho_barcos = [2,3,4,5,6]
+	for tamanho in tamanho_barcos:
+		colocado = False
+		while(not colocado):
+			colocado = colocarBarco(tabuleiro, posicaoRandom(), tamanho)
+
+
+
+
 
 
 
 ##### Testes
-#tabuleiro = criaTabuleiro()
+tabuleiro = criaTabuleiro()
+#print(colocarBarco(tabuleiro,((5,0),1),5))
+colocarBarcos(tabuleiro)
+desenhaTabuleiroDescoberto(tabuleiro)
+
 #tabuleiro[0][0] = 3
 #tabuleiro[0][1] = 3
 #tabuleiro[6][0] = 4
