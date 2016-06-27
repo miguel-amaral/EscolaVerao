@@ -1,3 +1,4 @@
+import random
 class bcolors:
 	ANSI_RESET =  "\033[0m"
 	ANSI_BLACK =  "\033[30m"
@@ -54,7 +55,7 @@ lista de listas com inteiros
 -1 tiro disparado sem barco
  0 agua
  1 barco, danificado
- 2 barco, sem danos
+ >2 barco, sem danos (valores entre 2 e 5 normalmente, tamanho dos barcos)
 '''
 def criaTabuleiro():
 	return [[0,0,0,0,0,0,0,0,0,0] for i in range(10)]
@@ -96,6 +97,11 @@ def dispararTiro(tabuleiro, coordenadas):
 			print("Parabens! barco afundado!")
 	else:
 		print("Apenas havia agua..")
+
+def coordenadaRandom():
+	linha  = random.randint(0, 9)
+	coluna = random.randint(0, 9)
+	return (linha,coluna)
 
 
 
