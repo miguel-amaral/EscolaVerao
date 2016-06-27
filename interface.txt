@@ -1,0 +1,17 @@
+preencherTabuleiroAleatoriamente
+dispararTiro
+tabuleiroCompleto
+pedeJogada
+desenhaTabuleiro
+criaTabuleiro
+
+
+
+tabuleiro -> lista de listas com inteiros
+-1 tiro disparado sem barco
+ 0 agua
+ 1 barco, danificado
+ numero > 2 barco, sem danos
+
+
+ coordenada -> tuplo/lista (linha,coluna)

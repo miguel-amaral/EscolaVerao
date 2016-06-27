@@ -82,7 +82,7 @@ lista de listas com inteiros
 -1 tiro disparado sem barco
  0 agua
  1 barco, danificado
- >2 barco, sem danos (valores entre 2 e 5 normalmente, tamanho dos barcos)
+ numero > 2 barco, sem danos
 '''
 def criaTabuleiro():
 	return [[0,0,0,0,0,0,0,0,0,0] for i in range(10)]
@@ -171,7 +171,7 @@ def colocarBarco(tabuleiro, posicao, tamanhoBarco):
 	return True
 
 
-def colocarBarcos(tabuleiro):
+def preencherTabuleiroAleatoriamente(tabuleiro):
 	tamanho_barcos = [2,3,4,5,6]
 	for tamanho in tamanho_barcos:
 		colocado = False
@@ -185,11 +185,10 @@ def colocarBarcos(tabuleiro):
 
 
 ##### Testes
-tabuleiro = criaTabuleiro()
+#tabuleiro = criaTabuleiro()
 #print(colocarBarco(tabuleiro,((5,0),1),5))
-colocarBarcos(tabuleiro)
-desenhaTabuleiroDescoberto(tabuleiro)
-
+#colocarBarcos(tabuleiro)
+#desenhaTabuleiroDescoberto(tabuleiro)
 #tabuleiro[0][0] = 3
 #tabuleiro[0][1] = 3
 #tabuleiro[6][0] = 4
