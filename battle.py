@@ -62,7 +62,7 @@ def desenhaTabuleiroDescoberto(tabuleiro):
 		for coluna in linha:
 			print("", end=" ")
 			if(coluna == -1):
-				colourCode = bcolors.ANSI_GREEN
+				colourCode = bcolors.ANSI_BLUE
 			elif(coluna == 1):
 				colourCode = bcolors.ANSI_RED
 			elif(coluna == 0):
@@ -174,7 +174,7 @@ def colocarBarco(tabuleiro, posicao, tamanhoBarco):
 
 
 def preencherTabuleiroAleatoriamente(tabuleiro):
-	tamanho_barcos = [2,3,4,5,6]
+	tamanho_barcos = [2,3,4,5]
 #	tamanho_barcos = [2]
 	for tamanho in tamanho_barcos:
 		colocado = False
@@ -190,8 +190,6 @@ def jogo():
 
 	print("Bem vindos ao jogo BATALHA NAVAL")
 
-#	desenhaTabuleiroDescoberto(tabuleiro1)
-#	desenhaTabuleiroDescoberto(tabuleiro2)
 	while(not tabuleiroCompleto(tabuleiro1) and not tabuleiroCompleto(tabuleiro2)):
 		print("\n\nVez do ",bcolors.ANSI_PURPLE,bcolors.ANSI_BOLD,"Jogador 1:",sep="")
 		resetColour()
@@ -212,11 +210,12 @@ def jogo():
 	else:
 		print(bcolors.ANSI_PURPLE,bcolors.ANSI_BOLD,"Jogador 1 foi o vencedor\n\n", sep="")
 	
+	desenhaTabuleiroDescoberto(tabuleiro1)
+	desenhaTabuleiroDescoberto(tabuleiro2)
 	resetColour()
-jogo()
-
-
-
+	
+	
+# jogo()
 ##### Testes
 #tabuleiro = criaTabuleiro()
 #print(colocarBarco(tabuleiro,((5,0),1),5))
