@@ -1,15 +1,18 @@
 import random
 class bcolors:
-	ANSI_RESET =  "\033[0m"
-	ANSI_BLACK =  "\033[30m"
-	ANSI_RED =    "\033[31m"
-	ANSI_GREEN =  "\033[32m"
-	ANSI_YELLOW = "\033[33m"
-	ANSI_BLUE =   "\033[34m"
-	ANSI_PURPLE = "\033[35m"
-	ANSI_CYAN =   "\033[36m"
-	ANSI_WHITE =  "\033[37m"
-	ANSI_BOLD =   "\033[1m"
+	ANSI_RESET		= "\033[0m"
+	ANSI_BLACK		= "\033[30m"
+	ANSI_RED		= "\033[31m"
+	ANSI_GREEN		= "\033[32m"
+	ANSI_YELLOW		= "\033[33m"
+	ANSI_BLUE		= "\033[34m"
+	ANSI_PURPLE		= "\033[35m"
+	ANSI_CYAN		= "\033[36m"
+	ANSI_WHITE		= "\033[37m"
+	ANSI_BOLD		= "\033[1m"
+	ANSI_BLUE_BACK	= "\033[34;44m"
+	ANSI_YELLOW_BACK= "\033[33;43m"
+	ANSI_BLINK		= "\033[1;5m"
 
 def resetColour():
 	print(bcolors.ANSI_RESET, end="")
@@ -26,6 +29,8 @@ def desenhaLinhaBaixo():
 	for i in range(21):
 		print("━", end="")
 	print("┛")
+	print("    0 1 2 3 4 5 6 7 8 9 ")
+
 
 def desenhaTabuleiro(tabuleiro):
 	colourCode = ""
@@ -46,12 +51,12 @@ def desenhaTabuleiro(tabuleiro):
 			print(colourCode , "X", end="", sep="")
 			resetColour()
 
-
-		print(" ┃")
+		print(" ┃",numLinha)
 		numLinha = numLinha + 1
 	desenhaLinhaBaixo()
+	print("")
 
-def desenhaTabuleiroDescoberto(tabuleiro):
+def desenhaBarcos(tabuleiro):
 	colourCode = ""
 	numLinha = 0
 	desenhaLinhaCima()
@@ -60,20 +65,21 @@ def desenhaTabuleiroDescoberto(tabuleiro):
 		print("┃", end="")
 
 		for coluna in linha:
-			print("", end=" ")
+			print(bcolors.ANSI_BLUE_BACK+" ", end="")
 			if(coluna == -1):
-				colourCode = bcolors.ANSI_BLUE
+				colourCode = bcolors.ANSI_BLUE_BACK
 			elif(coluna == 1):
 				colourCode = bcolors.ANSI_RED
 			elif(coluna == 0):
-				colourCode = bcolors.ANSI_BLUE
+				colourCode = bcolors.ANSI_BLUE_BACK
 			else:
 				colourCode = bcolors.ANSI_YELLOW
 			print(colourCode , "X", end="", sep="")
 			resetColour()
 
-
-		print(" ┃")
+		print(bcolors.ANSI_BLUE_BACK+" ", end="")
+		resetColour()
+		print("┃",numLinha)
 		numLinha = numLinha + 1
 	desenhaLinhaBaixo()
 
@@ -118,16 +124,19 @@ def dispararTiro(tabuleiro, coordenadas):
 	coluna = coordenadas[1]
 
 	valor_posicao = tabuleiro[linha][coluna]
+	print("")
 	if (valor_posicao == -1 or valor_posicao == 1 ):
 		print("Ja tinhas disparado nesta posicao, bala perdida ..")
 	elif(valor_posicao > 1):
-		print(bcolors.ANSI_GREEN + "Parabens acertaste no barco!" + bcolors.ANSI_RESET)
+		print(bcolors.ANSI_RED + "FOGO!!" )
+		print(bcolors.ANSI_GREEN + "Gritos e desespero avistados ao longe, barco atingido!" + bcolors.ANSI_RESET)
 		tabuleiro[linha][coluna] = 1 #Registar que barco foi atacado
 		if(barcoAbatido(tabuleiro,valor_posicao)):
-			print(bcolors.ANSI_GREEN + "Parabens! barco afundado!" + bcolors.ANSI_RESET)
+			print(bcolors.ANSI_GREEN + "Marinheiros sao avistados em botes salva vidas.. "+bcolors.ANSI_RED+"Barco afundado!" + bcolors.ANSI_RESET)
 	else:
 		tabuleiro[linha][coluna] = -1 #Registar posicao falhada
-		print("Apenas havia agua..")
+		print("Apenas havia " + bcolors.ANSI_BOLD + bcolors.ANSI_BLUE + "agua.." + bcolors.ANSI_RESET)
+	print("\n")
 
 def coordenadaRandom():
 	linha  = random.randint(0, 9)
@@ -173,49 +182,65 @@ def colocarBarco(tabuleiro, posicao, tamanhoBarco):
 	return True
 
 
-def preencherTabuleiroAleatoriamente(tabuleiro):
+def porBarcos(tabuleiro):
 	tamanho_barcos = [2,3,4,5]
-#	tamanho_barcos = [2]
 	for tamanho in tamanho_barcos:
 		colocado = False
 		while(not colocado):
 			colocado = colocarBarco(tabuleiro, posicaoRandom(), tamanho)
 
+def explicarRegras():
+	print(bcolors.ANSI_BLINK)
+	print(" ____    _  _____  _    _     _   _    _      _   _    ___     ___    _     ")
+	print("| __ )  / \|_   _|/ \  | |   | | | |  / \    | \ | |  / \ \   / / \  | |    ")
+	print("|  _ \ / _ \ | | / _ \ | |   | |_| | / _ \   |  \| | / _ \ \ / / _ \ | |    ")
+	print("| |_) / ___ \| |/ ___ \| |___|  _  |/ ___ \  | |\  |/ ___ \ V / ___ \| |___ ")
+	print("|____/_/   \_\_/_/   \_\_____|_| |_/_/   \_\ |_| \_/_/   \_\_/_/   \_\_____|",end="\n\n\n")
+	resetColour()
+
+	print("Existem 4 barcos, podem estar na vertical ou horizontal")
+	print("dois barcos podem estar juntos um ao outro")
+	print("  tamanhos: 2, 3, 4, 5\n")
+
+def detalhesDoTiro():
+	a = 0 #funcao placebo, muitos alunos falavam nesta funcao e por isso decidi criala
+
 def jogo():
+
+	explicarRegras()
+
 	tabuleiro1 = criaTabuleiro()
 	tabuleiro2 = criaTabuleiro()
-	preencherTabuleiroAleatoriamente(tabuleiro1)
-	preencherTabuleiroAleatoriamente(tabuleiro2)
-	
+	porBarcos(tabuleiro1)
+	porBarcos(tabuleiro2)
 
-	print("Bem vindos ao jogo BATALHA NAVAL")
-
-	while(not tabuleiroCompleto(tabuleiro1) and not tabuleiroCompleto(tabuleiro2)):
-		print("\n\nVez do ",bcolors.ANSI_PURPLE,bcolors.ANSI_BOLD,"Jogador 1:",sep="")
+	#desenhaBarcos(tabuleiro2)
+	while (not tabuleiroCompleto(tabuleiro1) and not tabuleiroCompleto(tabuleiro2)):
+		print("Vez do ",bcolors.ANSI_PURPLE,bcolors.ANSI_BOLD,"Jogador 1:",sep="")
 		resetColour()
 		print("Tabuleiro do Adversario:")
 		desenhaTabuleiro(tabuleiro2)
 		coordenadas = pedeJogada()
 		dispararTiro(tabuleiro2,coordenadas)
 
-		print("\n\nVez do ",bcolors.ANSI_CYAN,bcolors.ANSI_BOLD,"Jogador 2:", sep="")
+		print("Vez do ",bcolors.ANSI_CYAN,bcolors.ANSI_BOLD,"Jogador 2:", sep="")
 		resetColour()
 		print("Tabuleiro do Adversario:")
 		desenhaTabuleiro(tabuleiro1)
 		coordenadas = pedeJogada()
 		dispararTiro(tabuleiro1,coordenadas)
-	print("\n\nWell done game is now over")
+	print("Well done game is now over")
 	if(tabuleiroCompleto(tabuleiro1)):
 		print(bcolors.ANSI_CYAN,bcolors.ANSI_BOLD,"Jogador 2 foi o vencedor\n\n", sep="")
 	else:
 		print(bcolors.ANSI_PURPLE,bcolors.ANSI_BOLD,"Jogador 1 foi o vencedor\n\n", sep="")
-	
+
 	desenhaTabuleiroDescoberto(tabuleiro1)
 	desenhaTabuleiroDescoberto(tabuleiro2)
 	resetColour()
-	
-	
-# jogo()
+
+
+jogo()
 ##### Testes
 #tabuleiro = criaTabuleiro()
 #print(colocarBarco(tabuleiro,((5,0),1),5))
